@@ -24,8 +24,8 @@ model User{
 model Image{
   userId  String  @unique
   user   User @relation(fields: [userId], references: [id])
-  url  String
-  createdAt  DateTime
+  url  String?
+  createdAt  DateTime @default(now())
   prompt  String
 
 }
