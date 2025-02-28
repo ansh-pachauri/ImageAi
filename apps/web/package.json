@@ -11,9 +11,13 @@
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
+    "@radix-ui/react-label": "^2.1.2",
     "@repo/ui": "workspace:*",
+    "@tabler/icons-react": "^3.30.0",
     "@tailwindcss/postcss": "^4.0.9",
+    "axios": "^1.7.9",
     "clsx": "^2.1.1",
+    "cors": "^2.8.5",
     "framer-motion": "^12.4.7",
     "motion": "^12.4.7",
     "next": "^15.1.6",

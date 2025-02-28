@@ -6,14 +6,20 @@ import {middleware} from "./middleware";
 import axios from "axios";
 import fs from "fs";
 import FormData from "form-data";
+import cors from 'cors';
 import dotenv from "dotenv";
 dotenv.config();
+
 
 
 const JWT_SECRET = "secret";
 
 const app = express();
 app.use(express.json());
+app.use(cors({
+    origin: 'http://localhost:3000',
+    credentials: true
+}));
 
 app.post("/signup", async(req, res) => {
     const zod = z.object({
@@ -132,11 +138,14 @@ app.post("/image",middleware, async(req, res) => {
                 createdAt: new Date(),
             }
           });
-    
-          res.json({
-            message: "Image generated successfully",
-            url: filepath
-          });
+
+          if(image){
+            res.status(200).json({
+                message: "Image generated successfully",
+                url: filepath
+              });
+          }
+          
     }catch (error) {
         console.error('Image generation error:', error);
         res.status(500).json({
