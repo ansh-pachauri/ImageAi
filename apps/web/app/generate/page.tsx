@@ -18,10 +18,10 @@ export default function Generate() {
         setError(null);
 
         try{
-            const response  = await axios.post(`${process.env.BACKEND_URL}/image`, {prompt},{
+            const response  = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/image`, {prompt},{
                 headers:{
                     'Content-Type': 'application/json',
-                    'Authorization': localStorage.getItem('token') || ''}
+                    Authorization: localStorage.getItem('token') || ''}
                 });
             
 

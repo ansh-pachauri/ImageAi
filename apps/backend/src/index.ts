@@ -18,7 +18,9 @@ const app = express();
 app.use(express.json());
 app.use(cors({
     origin: 'http://localhost:3000',
-    credentials: true
+    credentials: true,
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 app.post("/signup", async(req, res) => {
@@ -81,7 +83,7 @@ app.post("/signin", async(req, res) => {
 });
 
 //images route
-app.post("/image",middleware, async(req, res) => {
+app.post("/image", middleware, async (req, res, next) => {
 
     try{
 
@@ -102,7 +104,7 @@ app.post("/image",middleware, async(req, res) => {
           };
           
           const response = await axios.postForm(
-            `https://api.stability.ai/v2beta/stable-image/generate/ultra`,
+            `https://api.stability.ai/v2beta/stable-image/generate/sd3`,
             axios.toFormData(payload, new FormData()),
             {
               validateStatus: undefined,

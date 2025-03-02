@@ -5,17 +5,43 @@ import { Label } from "../../components/ui/label";
 import { cn } from "../../lib/utils";
 import { useState } from 'react';
 
-import Link from "next/link";
-export default function Signin() {
+import axios from "axios";
+import { useRouter } from "next/navigation";
+export default  function Signin() {
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const router = useRouter();
 
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log("Form submitted");
+        console.log("You are in sign in page");
+
+        try{
+          const token   = localStorage.getItem('token');
+          const responce = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/signin`,
+            {username, password},{
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+              }
+            }
+          );
+          if(responce.data.token){
+            localStorage.setItem('token', responce.data.token);
+            router.push('/generate');
+          }else{
+            throw new Error('Failed to sign in');
+          }
+          console.log(responce.data.userId);
+
+        }catch(error){
+          console.error(error);
+        }
       };
+
+
     return (
         <div className="min-h-screen flex justify-between bg-black/[0.96] ">
             {/* Image */}
@@ -47,7 +73,7 @@ export default function Signin() {
         </LabelInputContainer>
         
 
-        <Link href="/generate">
+        
         <button
           className="bg-gradient-to-br relative group/btn from-black dark:from-zinc-900 dark:to-zinc-900 to-neutral-600 block dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
           
@@ -55,7 +81,6 @@ export default function Signin() {
           Sign in &rarr;
           <BottomGradient />
         </button>
-        </Link>
         
  
         <div className="bg-gradient-to-r from-transparent via-neutral-300 dark:via-neutral-700 to-transparent my-8 h-[1px] w-full" />
