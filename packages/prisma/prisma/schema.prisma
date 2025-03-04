@@ -18,11 +18,12 @@ model User{
   username   String  @unique
   password   String
   createdAt  DateTime @default(now())
-  images     Image[]
+  images     Images[]
 }
 
-model Image{
-  userId  String  @unique
+model Images{
+  id   String @id @default(uuid())  
+  userId  String  
   user   User @relation(fields: [userId], references: [id])
   url  String?
   createdAt  DateTime @default(now())

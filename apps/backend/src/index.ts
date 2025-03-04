@@ -8,6 +8,7 @@ import fs from "fs";
 import FormData from "form-data";
 import cors from 'cors';
 import dotenv from "dotenv";
+import path from 'path';
 dotenv.config();
 
 
@@ -100,7 +101,7 @@ app.post("/image", middleware, async (req, res, next) => {
             prompt: parsedData.data.prompt,
             n: 1,
             size: "1024x1024",
-            output_format: "webp"
+            output_format: "jpeg"
           };
           
           const response = await axios.postForm(
@@ -118,7 +119,7 @@ app.post("/image", middleware, async (req, res, next) => {
           
           //saving image
           const timestamp = Date.now();
-          const filename = `image_${timestamp}.webp`;
+          const filename = `image_${timestamp}.jpeg`;
           const filepath = `./uploads/${filename}`;
           
           // Create uploads directory if it doesn't exist
@@ -131,20 +132,21 @@ app.post("/image", middleware, async (req, res, next) => {
        
     
         //save to db
-          const image  = await client.image.create({
+          const image  = await client.images.create({
             data:{
-                //@ts-ignore
+                //@ts-ignore    
                 userId: req.userId,
                 prompt: parsedData.data.prompt,
-                url: "filepath",
-                createdAt: new Date(),
+                url: filepath,
             }
+
           });
 
           if(image){
+            const imageUrl = `${process.env.BACKEND_URL}/uploads/${path.basename(filepath)}`;
             res.status(200).json({
                 message: "Image generated successfully",
-                url: filepath
+                imageUrl: imageUrl
               });
           }
           
@@ -157,7 +159,9 @@ app.post("/image", middleware, async (req, res, next) => {
 
     });
 
+// Modify your express setup to serve static files
+app.use('/uploads', express.static('uploads'));
 
-app.listen(3001, () => {
-    console.log("Server is running on port 3001");
+app.listen(3002, () => {
+    console.log("Server is running on port 3002");
 });
