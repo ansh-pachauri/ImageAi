@@ -21,8 +21,13 @@ app.use(cors({
     origin: 'http://localhost:3000',
     credentials: true,
     methods: ['GET', 'POST'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    exposedHeaders: ['Content-Type', 'Content-Disposition'] 
 }));
+
+
+// Modify your express setup to serve static files
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 app.post("/signup", async(req, res) => {
     const zod = z.object({
@@ -112,7 +117,8 @@ app.post("/image", middleware, async (req, res, next) => {
               responseType: "arraybuffer",
               headers: { 
                 Authorization: `Bearer ${process.env.STABILITY_API_KEY}`, 
-                Accept: "image/*" 
+                Accept: "image/*" ,
+                
               },
             },
           );
@@ -143,10 +149,11 @@ app.post("/image", middleware, async (req, res, next) => {
           });
 
           if(image){
-            const imageUrl = `${process.env.BACKEND_URL}/uploads/${path.basename(filepath)}`;
+            const imageUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/${filename}`;
+            console.log(process.env.NEXT_PUBLIC_BACKEND_URL);
             res.status(200).json({
                 message: "Image generated successfully",
-                imageUrl: imageUrl
+                imageUrl
               });
           }
           
@@ -159,8 +166,7 @@ app.post("/image", middleware, async (req, res, next) => {
 
     });
 
-// Modify your express setup to serve static files
-app.use('/uploads', express.static('uploads'));
+
 
 app.listen(3002, () => {
     console.log("Server is running on port 3002");
