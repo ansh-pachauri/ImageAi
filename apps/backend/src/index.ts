@@ -105,7 +105,7 @@ app.post("/image", middleware, async (req, res, next) => {
         const payload = {
             prompt: parsedData.data.prompt,
             n: 1,
-            size: "1024x1024",
+            size: "720x720",
             output_format: "jpeg"
           };
           

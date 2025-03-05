@@ -1,8 +1,7 @@
-
 "use client";
 
 import { Input } from "../../components/ui/input";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import Image from "next/image";
 import { Sparkles, Image as ImageIcon, Loader2 } from "lucide-react";
@@ -10,9 +9,15 @@ import { Sparkles, Image as ImageIcon, Loader2 } from "lucide-react";
 export default function Generate() {
     const inputRef = useRef<HTMLInputElement>(null);
     const [prompt, setPrompt] = useState('');
-    const [image, setImage] = useState('');
+    const [image, setImage] = useState<string | null>(null); // Change to null initially
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [mounted, setMounted] = useState(false); // Add mounted state
+
+    // Add useEffect to handle client-side mounting
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -50,6 +55,11 @@ export default function Generate() {
         }
     };
 
+    // Don't render anything until mounted
+    if (!mounted) {
+        return null;
+    }
+
     return (
         <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white p-8">
             <div className="max-w-4xl mx-auto">
@@ -57,7 +67,7 @@ export default function Generate() {
                     <div className="flex items-center justify-center gap-2 mb-4">
                         <Sparkles className="w-8 h-8 text-purple-400" />
                         <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-pink-600 text-transparent bg-clip-text">
-                            AI Image Generator
+                            DreamWave Image Generator
                         </h1>
                     </div>
                     <p className="text-gray-400 max-w-2xl mx-auto">
@@ -112,11 +122,14 @@ export default function Generate() {
                         </div>
                     ) : image ? (
                         <div className="relative group">
-                            <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl blur opacity-20 group-hover:opacity-30 transition-opacity"></div>
-                            <img
+                            <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl blur opacity-20 group-hover:opacity-30 transition-opacity" />
+                            <Image 
                                 src={image}
                                 alt="Generated Image"
+                                width={512}
+                                height={512}
                                 className="relative rounded-lg shadow-2xl max-w-full h-auto transform transition-transform duration-300 group-hover:scale-[1.01]"
+                                unoptimized
                             />
                         </div>
                     ) : (
@@ -128,13 +141,12 @@ export default function Generate() {
                 </div>
             </div>
 
-            {/* Last Prompt Display */}
-          {prompt && (
-            <div className="text-center">
-              <span className="text-gray-500">Last prompt: </span>
-              <span className="text-gray-300 italic">{prompt}</span>
-            </div>
-          )}
+            {prompt && mounted && (
+                <div className="mt-4 text-center">
+                    <span className="text-gray-500">Last prompt: </span>
+                    <span className="text-gray-300 italic">{prompt}</span>
+                </div>
+            )}
         </div>
     );
 }

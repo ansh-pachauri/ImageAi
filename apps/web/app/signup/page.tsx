@@ -6,6 +6,8 @@ import { cn } from "../../lib/utils";
 import { useState, useRef } from 'react';
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { SocialButtons } from "../../components/ui/SocialButtons";
+import Link from "next/link";
 
 import {
   IconBrandGithub,
@@ -46,76 +48,97 @@ export default function Signup() {
         
       };
     return (
-        <div className="min-h-screen flex justify-between bg-black/[0.96] ">
-            {/* Image */}
-            <div >
-            <Image src="/images/signup_grl.jpg" alt="Signup" width={500} height={500} className="object-cover" priority />
-
-            </div>
-            {/* Form */}
-            <div className="flex flex-col justify-center max-w-md mx-auto p-8">
-            <h2 className="font-bold text-3xl text-neutral-800 dark:text-neutral-200">
-        Welcome to DreamWeave
-      </h2>
-      <p className="text-neutral-600 text-md max-w-sm mt-2 dark:text-neutral-300">
-        Login to DreamWeave if you can because we don&apos;t have a login flow
-        yet
-      </p>
-
-                 <form className="my-8" onSubmit={handleSubmit}>
-        
-        <LabelInputContainer className="mb-4">
-          <Label htmlFor="email">Email Address</Label>
-          <Input id="email" placeholder="projectmayhem@fc.com" type="email" value={username} onChange={(e) => setUsername(e.target.value)} ref={usernameRef} />
-        </LabelInputContainer>
-        <LabelInputContainer className="mb-4">
-          <Label htmlFor="password">Password</Label>
-          <Input id="password" placeholder="••••••••" type="password" value={password} onChange={(e) => setPassword(e.target.value)} ref={passwordRef} />
-        </LabelInputContainer>
-        
-
-        
-        <button
-          className="bg-gradient-to-br relative group/btn from-black dark:from-zinc-900 dark:to-zinc-900 to-neutral-600 block dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]" type="submit"
-        
-        >
-          Sign up &rarr;
-          <BottomGradient />
-        </button>
-        
-        
- {/* seperator */}
-        <div className="bg-gradient-to-r from-transparent via-neutral-300 dark:via-neutral-700 to-transparent my-8 h-[1px] w-full" />
- 
-        <div className="flex flex-col space-y-4">
-          <button
-            className=" relative group/btn flex space-x-2 items-center justify-start px-4 w-full text-black rounded-md h-10 font-medium shadow-input bg-gray-50 dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_var(--neutral-800)]"
-            type="button"
-          >
-            <IconBrandGithub className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
-            <span className="text-neutral-700 dark:text-neutral-300 text-sm">
-              GitHub
-            </span>
-            <BottomGradient />
-          </button>
-          <button
-            className=" relative group/btn flex space-x-2 items-center justify-start px-4 w-full text-black rounded-md h-10 font-medium shadow-input bg-gray-50 dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_var(--neutral-800)]"
-            type="button"
-          >
-            <IconBrandGoogle className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
-            <span className="text-neutral-700 dark:text-neutral-300 text-sm">
-              Google
-            </span>
-            <BottomGradient />
-          </button>
-          
-        </div>
-      </form>
-                
+        <div className="min-h-screen flex bg-black/[0.96]">
+            {/* Left: Image Section */}
+            <div className="hidden lg:block lg:w-1/2 relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-r from-black/30 to-transparent z-10" />
+                <Image 
+                    src="/images/signup_grl.jpg" 
+                    alt="Signup" 
+                    fill
+                    
+                    className="object-cover object-center transform hover:scale-105 transition-transform duration-500"
+                    priority 
+                />
             </div>
 
+            {/* Right: Form Section */}
+            <div className="w-full lg:w-1/2 flex flex-col justify-center px-8 lg:px-16 relative">
+                {/* Background Gradients */}
+                <div className="absolute inset-0 bg-[radial-gradient(circle_500px_at_50%_200px,#3B82F660,transparent)]" />
+                <div className="absolute inset-0 bg-[radial-gradient(circle_500px_at_80%_600px,#9333EA60,transparent)]" />
+
+                <div className="relative z-10 max-w-md mx-auto w-full">
+                    {/* Header */}
+                    <div className="space-y-4 mb-8">
+                        <h2 className="font-bold text-4xl bg-clip-text text-transparent bg-gradient-to-r from-white to-purple-500">
+                            Welcome to DreamWeave
+                        </h2>
+                        <p className="text-gray-400 text-lg">
+                            Create your account and start generating amazing AI images
+                        </p>
+                    </div>
+
+                    {/* Form */}
+                    <form className="space-y-6" onSubmit={handleSubmit}>
+                        <LabelInputContainer className="mb-4">
+                            <Label htmlFor="email" className="text-gray-300">Email Address</Label>
+                            <Input 
+                                id="email" 
+                                placeholder="you@example.com" 
+                                type="email"
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
+                                ref={usernameRef}
+                                className="bg-gray-900/50 border-gray-800 text-white placeholder:text-gray-500 focus:border-purple-500 focus:ring-purple-500"
+                            />
+                        </LabelInputContainer>
+
+                        <LabelInputContainer className="mb-4">
+                            <Label htmlFor="password" className="text-gray-300">Password</Label>
+                            <Input
+                                id="password"
+                                placeholder="••••••••"
+                                type="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                ref={passwordRef}
+                                className="bg-gray-900/50 border-gray-800 text-white placeholder:text-gray-500 focus:border-purple-500 focus:ring-purple-500"
+                            />
+                        </LabelInputContainer>
+
+                        <button
+                            className="relative w-full group bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg h-12 font-medium shadow-lg shadow-purple-500/25 transition-all duration-300 hover:shadow-purple-500/40 hover:-translate-y-0.5"
+                            type="submit"
+                        >
+                            Sign up
+                            <span className="absolute inset-x-0 -bottom-px h-px bg-gradient-to-r from-transparent via-white/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                        </button>
+
+                        {/* Separator */}
+                        <div className="relative my-8">
+                            <div className="absolute inset-0 flex items-center">
+                                <div className="w-full border-t border-gray-800"></div>
+                            </div>
+                            
+                        </div>
+
+                        {/* Social Buttons */}
+                        <SocialButtons />
+
+                        <p className="text-center text-gray-500 mt-8">
+                            Don't have an account?{' '}
+                            <Link href="/signin" className="text-purple-500 hover:text-purple-400 transition-colors">
+                                Sign in
+                            </Link>
+                        </p>
+
+                       
+                    </form>
+                </div>
+            </div>
         </div>
-    )
+    );
 }
 
 const BottomGradient = () => {
