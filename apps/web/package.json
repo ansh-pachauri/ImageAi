@@ -11,6 +11,7 @@
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
+    "@auth/core": "^0.38.0",
     "@auth/prisma-adapter": "^2.8.0",
     "@radix-ui/react-label": "^2.1.2",
     "@repo/ui": "workspace:*",
@@ -34,7 +35,7 @@
     "@repo/db": "workspace:*",
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "@types/node": "^22",
+    "@types/node": "^22.13.0",
     "@types/react": "19.0.8",
     "@types/react-dom": "19.0.3",
     "eslint": "^9.20.0",
